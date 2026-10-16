@@ -93,7 +93,9 @@ $$ |x_{n+1} - x_n| \leq \varepsilon $$
 struct Test {#include <iostream>
 #include <cmath>     // Подключаем std::pow для возведения в степень и std::abs для модуля
 #include <iomanip>
-#include <clocale> // Подключаем std::setprecision для управления количеством знаков после запятой
+#include <clocale>// Подключаем std::setprecision для управления количеством знаков после запятой
+
+using namespace std;
 
 int main() {
     setlocale(LC_ALL, "Russian");
@@ -107,15 +109,13 @@ int main() {
     auto next_x = [&](double x) { return ((p - 1) * x + a / std::pow(x, p - 1)) / p; };
 
     // Задаем фиксированный формат вывода вещественных чисел с точностью 7 знаков после запятой
-    std::cout << std::fixed << std::setprecision(7);
+    cout << std::fixed << std::setprecision(7);
 
     // Внешний цикл: последовательно перебираем каждую заданную погрешность (eps)
     for (double eps : epsilons) {
-        std::cout << "--- Tochnost: " << eps << " ---\n";
+        cout << "--- Tochnost: " << eps << " ---\n";
 
-        // ==========================================
         // 1. ЦИКЛ С ПРЕДУСЛОВИЕМ (while)
-        // ==========================================
         double x0 = a;             // Задаем начальное приближение x_0 = a
         double x1 = next_x(x0);    // Вычисляем первое приближение x_1
         int it = 1;                // Счетчик итераций (первый шаг уже сделан)
@@ -126,11 +126,9 @@ int main() {
             x1 = next_x(x0);       // Вычисляем следующее приближение
             it++;                  // Увеличиваем счетчик шагов на 1
         }
-        std::cout << "While:    " << x1 << " (" << it << " ит.)\n";
+        cout << "While:    " << x1 << " (" << it << " ит.)\n";
 
-        // ==========================================
         // 2. ЦИКЛ С ПОСТУСЛОВИЕМ (do-while)
-        // ==========================================
         x1 = a;                    // Сбрасываем начальное значение для x_1
         it = 0;                    // Обнуляем счетчик итераций
 
@@ -141,11 +139,9 @@ int main() {
             it++;                  // Увеличиваем счетчик шагов
         } while (std::abs(x1 - x0) > eps); // Повторяем, если точность еще не достигнута
 
-        std::cout << "Do-While: " << x1 << " (" << it << " ит.)\n";
+        cout << "Do-While: " << x1 << " (" << it << " ит.)\n";
 
-        // ==========================================
         // 3. ПАРАМЕТРИЧЕСКИЙ ЦИКЛ (for)
-        // ==========================================
         x1 = a;                    // Снова сбрасываем приближение до исходного
         it = 0;                    // Обнуляем счетчик
 
@@ -155,16 +151,16 @@ int main() {
             x1 = next_x(x0);       // Считаем текущее значение
 
             // Критерий выхода: если точность достигнута, учитываем последний шаг и выходим
-            if (std::abs(x1 - x0) <= eps) {
+            if (abs(x1 - x0) <= eps) {
                 it++;              // Учитываем текущую (последнюю) итерацию
                 break;             // Прерываем выполнение цикла for
             }
         }
-        std::cout << "For:      " << x1 << " (" << it << " ит.)\n";
+        cout << "For:      " << x1 << " (" << it << " ит.)\n";
     }
 
     // Выводим эталонное значение с помощью стандартной функции (для проверки)
-    std::cout << "\nTochnoe znachenie (control'): " << std::pow(a, 1.0 / p) << "\n";
+    cout << "\nTochnoe znachenie (control'): " << std::pow(a, 1.0 / p) << "\n";
 
     return 0; // Успешное завершение программы
 }
@@ -202,14 +198,14 @@ using namespace std;
 
 // Структура "Адрес"
 struct Address {
-    std::string street; // Улица
+    string street; // Улица
     int house_number;   // Номер дома
     int flat_number;    // Номер квартиры
 };
 
 // Структура "Житель"
 struct Resident {
-    std::string full_name; // ФИО
+    string full_name; // ФИО
     Address address;       // Переменная структурного типа "Адрес"
     std::string gender;    // Пол ("мужской" или "женский")
     int age;               // Возраст
@@ -217,43 +213,43 @@ struct Resident {
 
 int main() {
     // Настройка локализации для корректного вывода и ввода кириллицы
-    std::setlocale(LC_ALL, "Russian");
+    setlocale(LC_ALL, "Russian");
 
     int n;
-    std::cout << "Vvidite kolichestvo zhitelei (n): ";
-    std::cin >> n;
+    cout << "Vvidite kolichestvo zhitelei (n): ";
+    cin >> n;
 
     // Используем vector для динамического массива структурного типа
-    std::vector<Resident> residents(n);
+    vector<Resident> residents(n);
 
     // Ввод исходных данных
     for (int i = 0; i < n; ++i) {
-        std::cout << "\n-- Vvod dannih dlya zhitelya№" << i + 1 << " ---\n";
-        std::cin.ignore(); // Очистка буфера после cin >>
+        cout << "\n-- Vvod dannih dlya zhitelya№" << i + 1 << " ---\n";
+        cin.ignore(); // Очистка буфера после cin >>
 
-        std::cout << "FIO: ";
-        std::getline(std::cin, residents[i].full_name);
+        cout << "FIO: ";
+        getline(std::cin, residents[i].full_name);
 
-        std::cout << "Ylica: ";
-        std::getline(std::cin, residents[i].address.street);
+        cout << "Ylica: ";
+        getline(std::cin, residents[i].address.street);
 
-        std::cout << "Dom: ";
-        std::cin >> residents[i].address.house_number;
+        cout << "Dom: ";
+        cin >> residents[i].address.house_number;
 
-        std::cout << "Nomer kv: ";
-        std::cin >> residents[i].address.flat_number;
+        cout << "Nomer kv: ";
+        cin >> residents[i].address.flat_number;
 
-        std::cout << "Man/Woman: ";
-        std::cin >> residents[i].gender;
+        cout << "Man/Woman: ";
+        cin >> residents[i].gender;
 
-        std::cout << "Age: ";
-        std::cin >> residents[i].age;
+        cout << "Age: ";
+        cin >> residents[i].age;
     }
 
     // Вывод введенных данных для контроля ввода
-    std::cout << "\n================ Dannie ================\n";
+    cout << "\n================ Dannie ================\n";
     for (int i = 0; i < n; ++i) {
-        std::cout << "Zhitel №" << i + 1 << ": " << residents[i].full_name
+        cout << "Zhitel №" << i + 1 << ": " << residents[i].full_name
                   << " | Adress " << residents[i].address.street
                   << ", Dom " << residents[i].address.house_number
                   << ", Kv " << residents[i].address.flat_number
@@ -264,12 +260,12 @@ int main() {
 
     // Обработка запроса (Вариант 14)
     // Используем словарь (map) для группировки подсчета по каждой уникальной улице
-    std::map<std::string, int> street_men_count;
+    map<std::string, int> street_men_count;
 
     for (int i = 0; i < n; ++i) {
         // Условие: мужской пол И старше 18 И младше 60 лет
-        if ((residents[i].gender == "man" || residents[i].gender == "woman") &&
-            residents[i].age > 18 && residents[i].age < 60) {
+        if ((residents[i].gender == "man") &&
+            residents[i].age > 17 && residents[i].age < 61) {
 
             // Увеличиваем счетчик для конкретной улицы
             street_men_count[residents[i].address.street]++;
@@ -277,13 +273,13 @@ int main() {
     }
 
     // Вывод результатов
-    std::cout << "--- Rezultati ---\n";
+    cout << "--- Rezultati ---\n";
     if (street_men_count.empty()) {
-        std::cout << "Man na odnoi ylice ot 18 do 60.\n";
+        cout << "Man na odnoi ylice ot 18 do 60.\n";
     } else {
-        std::cout << "Kolichestvo chelovek (ot 19 do 59 age) po ylicam:\n";
+        cout << "Kolichestvo chelovek (ot 19 do 59 age) po ylicam:\n";
         for (const auto& pair : street_men_count) {
-            std::cout << "Ylica \"" << pair.first << "\": " << pair.second << " chelovek.\n";
+            cout << "Ylica \"" << pair.first << "\": " << pair.second << " chelovek.\n";
         }
     }
 
